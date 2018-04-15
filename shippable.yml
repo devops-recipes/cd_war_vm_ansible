@@ -12,10 +12,17 @@ resources:
     type: integration
     integration: "drship_aws_pem"
 
-# AWS PEM Key
+# Nexus endpoint
   - name: cd_nexus_src
     type: integration
     integration: "drship_nexus"
+
+# AWS CLI config
+  - name: aws_cli_vm
+    type: cliConfig
+    integration: "drship_aws"
+    pointer:
+      region: us-east-1
 
 jobs:
 # Provision AWS VPC with Ansible
@@ -23,6 +30,8 @@ jobs:
     type: runSh
     steps:
       - IN: cd_war_vm_repo
+      - IN: aws_cli_vm
+        switch: off
       - IN: cd_nexus_src
         switch: off
       - IN: aws_ec2_info
