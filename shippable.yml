@@ -42,6 +42,8 @@ jobs:
           name: deploy_war
           runtime:
             options:
+              imageName: devopsrecipes/build_custom_ci
+              imageTag: 582111
               env:
                 - AWS_REGION:         "us-east-1"
                 - repository_url:     "http://174.129.56.184:8081/repository/snapshots/"
