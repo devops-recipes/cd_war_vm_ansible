@@ -1,0 +1,55 @@
+resources:
+# Automation scripts repo
+  - name: cd_war_vm_repo
+    type: gitRepo
+    integration: "drship_github"
+    versionTemplate:
+      sourceName: "devops-recipes/cd_war_vm_ansible"
+      branch: master
+
+# AWS PEM Key
+  - name: cd_war_vm_pem
+    type: integration
+    integration: "drship_aws_pem"
+
+# AWS PEM Key
+  - name: cd_nexus_src
+    type: integration
+    integration: "drship_nexus"
+
+jobs:
+# Provision AWS VPC with Ansible
+  - name: deploy_war_vm_ans
+    type: runSh
+    steps:
+      - IN: cd_war_vm_repo
+      - IN: cd_nexus_src
+        switch: off
+      - IN: aws_ec2_info
+        switch: off
+      - IN: cd_war_vm_pem
+        switch: off
+      - TASK:
+          name: deploy_war
+          runtime:
+            options:
+              env:
+                - AWS_REGION:         "us-east-1"
+                - repository_url:     "http://174.129.56.184:8081/repository/snapshots/"
+                - group_id:           "com.demo"
+                - artifact_id:        "helloworld"
+                - artifact_version:   "0.0.1-SNAPSHOT"
+                - artifact_extension: "war"
+          script:
+            - pushd $(shipctl get_resource_state "cd_war_vm_repo")/ansible
+            - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
+            - shipctl replace group_vars/variables.yml
+            - ansible-playbook -v war_fetch.yml
+            - ls -al
+            - popd
+    flags:
+      - cd
+      - vm
+      - aws
+      - ansible
+      - war

@@ -1,0 +1,12 @@
+# AWS Credentials
+aws_region:               "${AWS_REGION}"
+
+# Maven Repo Info
+repository_url:           "${repository_url}"
+
+# Artifact Info
+group_id:                 "${group_id}"
+artifact_id:              "${artifact_id}"
+artifact_version:         "${artifact_version}"
+artifact_extension:       "${artifact_extension}"
+artifact_filename:        "${artifact_filename}"
