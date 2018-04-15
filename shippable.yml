@@ -43,7 +43,7 @@ jobs:
           runtime:
             options:
               imageName: "devopsrecipes/build_custom_ci"
-              imageTag: "582111"
+              imageTag: "582227"
               pull: true
               env:
                 - AWS_REGION:         "us-east-1"
