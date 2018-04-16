@@ -29,10 +29,10 @@ jobs:
   - name: deploy_war_vm_ans
     type: runSh
     steps:
+      - IN: war_loc
       - IN: cd_war_vm_repo
-      - IN: aws_cli_vm
         switch: off
-      - IN: cd_nexus_src
+      - IN: aws_cli_vm
         switch: off
       - IN: aws_ec2_info
         switch: off
@@ -46,13 +46,7 @@ jobs:
               imageTag: "582227"
               pull: true
               env:
-                - AWS_REGION:         "us-east-1"
-                - repository_url:     "http://174.129.56.184:8081/repository/snapshots/"
-                - group_id:           "com.demo"
-                - artifact_id:        "helloworld"
-                - artifact_version:   "0.0.1-SNAPSHOT"
-                - artifact_extension: "war"
-                - artifact_dest:      "/tmp/jar"
+                - AWS_REGION: "us-east-1"
           script:
             - pushd $(shipctl get_resource_state "cd_war_vm_repo")/ansible
             - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
