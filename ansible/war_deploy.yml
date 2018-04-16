@@ -1,0 +1,17 @@
+---
+## provision AWS ECS cluster
+- hosts: localhost
+  connection: local
+  user: root
+  pre_tasks:
+    - include_vars: group_vars/variables.yml
+  roles:
+    - war_fetch
+
+- hosts: staging
+  connection: ssh
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  user: ubuntu
+  roles:
+    - war_deploy
