@@ -1,5 +1,5 @@
 ---
-## provision AWS ECS cluster
+
 - hosts: localhost
   connection: local
   user: root
