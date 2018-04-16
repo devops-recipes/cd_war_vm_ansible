@@ -46,7 +46,8 @@ jobs:
               imageTag: "582227"
               pull: true
               env:
-                - AWS_REGION: "us-east-1"
+                - AWS_REGION:         "us-east-1"
+                - artifact_dest:      "/tmp/jar"
           script:
             - pushd $(shipctl get_resource_state "cd_war_vm_repo")/ansible
             - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
