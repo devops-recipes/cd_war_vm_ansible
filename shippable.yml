@@ -58,7 +58,6 @@ jobs:
             - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
             - shipctl replace group_vars/variables.yml
             - ansible-playbook -v war_deploy.yml
-            - ls -al
             - popd
     flags:
       - cd
