@@ -13,5 +13,7 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   user: ubuntu
+  pre_tasks:
+    - include_vars: group_vars/variables.yml
   roles:
     - war_deploy
