@@ -1,6 +1,6 @@
 resources:
 # Automation scripts repo
-  - name: cd_war_vm_repo
+  - name: repo_cd_war_vm
     type: gitRepo
     integration: "drship_github"
     versionTemplate:
@@ -8,21 +8,14 @@ resources:
       branch: master
 
 # AWS PEM Key
-  - name: cd_war_vm_pem
+  - name: pem_cd_war_vm
     type: integration
     integration: "drship_aws_pem"
 
-# Nexus endpoint
-  - name: cd_nexus_src
+# AWS Integration config
+  - name: aws_cli_cd_war_vm
     type: integration
-    integration: "drship_nexus"
-
-# AWS CLI config
-  - name: aws_cli_vm
-    type: cliConfig
     integration: "drship_aws"
-    pointer:
-      region: us-east-1
 
 jobs:
 # Provision AWS VPC with Ansible
@@ -30,13 +23,13 @@ jobs:
     type: runSh
     steps:
       - IN: war_loc
-      - IN: cd_war_vm_repo
+      - IN: repo_cd_war_vm
         switch: off
-      - IN: aws_cli_vm
+      - IN: aws_cli_cd_war_vm
         switch: off
       - IN: aws_ec2_info
         switch: off
-      - IN: cd_war_vm_pem
+      - IN: pem_cd_war_vm
         switch: off
       - TASK:
           name: deploy_war
@@ -49,9 +42,11 @@ jobs:
                 - AWS_REGION:         "us-east-1"
                 - artifact_dest:      "/tmp/jar"
           script:
-            - pushd $(shipctl get_resource_state "cd_war_vm_repo")/ansible
+            - pushd $(shipctl get_resource_state "repo_cd_war_vm")/ansible
+            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_cli_cd_war_vm "accessKey")
+            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_cli_cd_war_vm "secretKey")
             - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
-            - shipctl replace group_vars/variables.yml
+            - shipctl replace variables.yml
             - ansible-playbook -v war_deploy.yml
             - popd
     flags:

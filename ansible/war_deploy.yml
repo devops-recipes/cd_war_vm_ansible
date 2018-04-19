@@ -4,9 +4,16 @@
   connection: local
   user: root
   pre_tasks:
-    - include_vars: group_vars/variables.yml
-  roles:
-    - war_fetch
+    - include_vars: variables.yml
+  tasks:
+    - name:                 Download artifact from Maven
+      maven_artifact:
+        repository_url:     "{{ repository_url }}"
+        group_id:           "{{ group_id }}"
+        artifact_id:        "{{ artifact_id }}"
+        version:            "{{ artifact_version }}"
+        extension:          "{{ artifact_extension }}"
+        dest:               "{{ artifact_filename }}"
 
 - hosts: staging
   connection: ssh
@@ -14,6 +21,15 @@
     ansible_python_interpreter: /usr/bin/python3
   user: ubuntu
   pre_tasks:
-    - include_vars: group_vars/variables.yml
-  roles:
-    - war_deploy
+    - include_vars: variables.yml
+  tasks:
+    - name: Make temp dir
+      shell: "mkdir -p {{ artifact_dest }}"
+
+    - name: Copy JAR file
+      copy:
+        src: "{{ artifact_filename }}"
+        dest: "{{ artifact_dest }}/."
+
+    - name: Test copy action
+      shell: "ls {{ artifact_dest }}"
