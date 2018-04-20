@@ -47,7 +47,7 @@ jobs:
             - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_cli_cd_war_vm "secretKey")
             - export artifact_filename=$artifact_id"-"$artifact_version"."$artifact_extension
             - shipctl replace variables.yml
-            - ansible-playbook -v war_deploy.yml
+            - ansible-playbook -v war_deploy_playbook.yml
             - popd
     flags:
       - cd
