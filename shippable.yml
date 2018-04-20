@@ -18,7 +18,7 @@ resources:
     integration: "drship_aws"
 
 jobs:
-# Provision AWS VPC with Ansible
+# Deploy WAR to VM
   - name: deploy_war_vm_ans
     type: runSh
     steps:
