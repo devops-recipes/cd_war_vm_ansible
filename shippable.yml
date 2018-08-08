@@ -15,7 +15,7 @@ resources:
 # AWS Integration config
   - name: aws_cli_cd_war_vm
     type: integration
-    integration: "drship_aws"
+    integration: "dr_aws"
 
 jobs:
 # Deploy WAR to VM
